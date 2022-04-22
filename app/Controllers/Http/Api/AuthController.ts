@@ -47,12 +47,16 @@ export default class AuthController {
                 message: 'User not found'
             })
         }
+
+        //checking for not verified
         if(!(user.isVerified)){
             return response.json({
                 success: false,
                 message: 'User is not verified'
             })
         }
+
+        //checking for inactive
         if(!(user.isActive)){
             return response.json({
                 success: false,
