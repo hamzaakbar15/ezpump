@@ -15,8 +15,8 @@ export default class Users extends BaseSchema {
       table.text('description')
       table.string('cover_image', 55)
       table.enum('type', ['pump', 'company']).notNullable()
-      table.boolean('isActive').defaultTo(true)
-      table.boolean('isVerified').defaultTo(false)
+      table.boolean('is_active').defaultTo(true)
+      table.boolean('is_verified').defaultTo(false)
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
