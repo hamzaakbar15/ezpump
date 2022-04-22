@@ -17,12 +17,22 @@ export default class AuthController {
 
         // })
         // const data = await request.validate({ schema: userSchema })
-        const {email} = request.all()
+        const {email, username} = request.all()
         const check = await User.findBy('email', email);
+        //check email address 
         if(check){
             return response.json({
                 success: false,
                 message: 'Email already exists'
+            })
+        }
+        
+        const checkUsername = await User.findBy('username', username);
+        //check username
+        if(checkUsername){
+            return response.json({
+                success: false,
+                message: 'Username already exists'
             })
         }
         
