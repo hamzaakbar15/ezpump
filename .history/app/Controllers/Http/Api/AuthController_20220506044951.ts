@@ -3,7 +3,9 @@
 import User from "App/Models/User";
 import Hash from '@ioc:Adonis/Core/Hash'
 import Mail from "@ioc:Adonis/Addons/Mail";
+import Drive from '@ioc:Adonis/Core/Drive'
 import Env from '@ioc:Adonis/Core/Env'
+import Application  from '@ioc:Adonis/Core/Application'
 
 // import { schema, rules } from '@ioc:Adonis/Core/Validator'
 
@@ -20,27 +22,18 @@ export default class AuthController {
 
         // })
         // const data = await request.validate({ schema: userSchema })
-        const { email, username, phone, } = request.all()
-
+        const { email, username } = request.all()
+        const check = await User.findBy('email', email);
         //check email address 
-        const checkEmail = await User.findBy('email', email);
-        if (checkEmail) {
+        if (check) {
             return response.json({
                 success: false,
                 message: 'Email already exists'
             })
         }
-        //check phone 
-        const checkPhone = await User.findBy('phone', phone);
-        if (checkPhone) {
-            return response.json({
-                success: false,
-                message: 'Phone Number already exists'
-            })
-        }
 
-        //check username
         const checkUsername = await User.findBy('username', username);
+        //check username
         if (checkUsername) {
             return response.json({
                 success: false,
@@ -117,22 +110,16 @@ export default class AuthController {
         if (!user) {
             return response.json({
                 success: false,
-                message: "Email Doesn't Exists"
-            })
-        }
-        if(!user.isVerified){
-            return response.json({
-                success: false,
-                message: "User is not verified"
+                message: "User doesn't exists"
             })
         }
         try {
             const code = Math.floor(Math.random() * 10000)
             await Mail.send((message) => {
                 message
-                    .from('noreply@ezpump.com')
-                    .to(email)
-                    .subject('EZ-Pump User Verification')
+                    .from('mohdsaadtabani@gmail.com')
+                    .to('saadmansoortabani@gmail.com')
+                    .subject('EZ-Pump')
                     .htmlView('emails/forget_password', { code })
             });
             user.code = code;
